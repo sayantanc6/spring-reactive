@@ -3,8 +3,6 @@ package dummy.document;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,18 +32,13 @@ public class Product {
 	 * 
 	 * */
 	
-	@NotNull
 //	@Id // cumbersome due to the implicit ObjectId conversion
 	@MongoId // no conversion attempts to any other type are made
-	@Pattern(regexp = "^([0-9]|[1-9][0-9]|100)$",message = "must be between 1 to 100")
 	private String productid;
 	
-	@NotNull
 	private String name;
 	
-	@NotNull
 	private double price;
 	
-	@NotNull
 	private int quantity;
 }
