@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,13 +18,10 @@ public class AppExceptionHandler {
 	
 	@Autowired
 	ErrorInfo error;
-	
-	@Autowired
-	Environment environment;
 
 	@ExceptionHandler(ProductNotFoundException.class)
 	public Mono<ResponseEntity<ErrorInfo>> productnotfound(ProductNotFoundException exception) {
-		 error.setErrorMessage(environment.getProperty(exception.getMessage()));
+		 error.setErrorMessage(exception.getMessage());
          error.setTimestamp(LocalDateTime.now());
          error.setErrorCode(HttpStatus.NOT_FOUND.value());
          return Mono.just(new ResponseEntity<ErrorInfo>(error, HttpStatus.NOT_FOUND));
@@ -33,7 +29,7 @@ public class AppExceptionHandler {
 	
 	@ExceptionHandler(Exception.class)
 	public Mono<ResponseEntity<ErrorInfo>> generalError(Exception exception) {
-		 error.setErrorMessage(environment.getProperty(exception.getMessage())); 
+		 error.setErrorMessage(exception.getMessage()); 
          error.setTimestamp(LocalDateTime.now());
          error.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
          return Mono.just(new ResponseEntity<ErrorInfo>(error, HttpStatus.INTERNAL_SERVER_ERROR));
